@@ -1,8 +1,146 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Section1() {
   const navigator = useNavigate();
+  const [cubeConnected, setCubeConnected] = useState(false);
+  const [lastConnectionTime, setLastConnectionTime] = useState(null);
+  const [lastDisconnectionTime, setLastDisconnectionTime] = useState(null);
+
+  // WebSocket connection
+  useEffect(() => {
+    let ws = null;
+    let reconnectInterval = null;
+
+    const connectWebSocket = () => {
+      try {
+        ws = new WebSocket('ws://192.168.134.191:5000'); // Update this IP
+        
+        ws.onopen = () => {
+          console.log('✅ Connected to WebSocket server');
+        };
+
+        ws.onmessage = (event) => {
+          console.log('📨 WebSocket message:', event.data);
+          
+          try {
+            const data = JSON.parse(event.data);
+            console.log('📦 Parsed data:', data);
+            
+            // 🔌 DEVICE CONNECTED - Any of these means device is active
+            if (data.command === 'device_startup' || 
+                data.command === 'sensor_data' || 
+                (data.command === 'device_status_update' && data.device_connected === true)) {
+              
+              console.log('🟢 DEVICE CONNECTED EVENT - Source:', data.command);
+              setCubeConnected(true);
+              setLastConnectionTime(Date.now());
+            }
+            
+            // ❌ DEVICE DISCONNECTED - Any of these means device is offline
+            else if (data.command === 'device_disconnected' || 
+                     data.command === 'device_inactive' || 
+                     (data.command === 'device_status_update' && data.device_connected === false)) {
+              
+              console.log('🔴 DEVICE DISCONNECTED EVENT - Source:', data.command);
+              setCubeConnected(false);
+              setLastDisconnectionTime(Date.now());
+            }
+            
+          } catch (e) {
+            // Handle plain text messages
+            if (event.data.includes('NodeMCU ready') || event.data.includes('startup')) {
+              console.log('🟢 DEVICE CONNECTED (plain text)');
+              setCubeConnected(true);
+              setLastConnectionTime(Date.now());
+            }
+          }
+        };
+
+        ws.onclose = () => {
+          console.log('❌ WebSocket connection closed');
+          
+          if (!reconnectInterval) {
+            reconnectInterval = setInterval(() => {
+              console.log('🔄 Attempting to reconnect...');
+              connectWebSocket();
+            }, 5000);
+          }
+        };
+
+        ws.onerror = (error) => {
+          console.error('🚨 WebSocket error:', error);
+        };
+
+      } catch (error) {
+        console.error('❌ Failed to connect to WebSocket:', error);
+      }
+    };
+
+    connectWebSocket();
+
+    return () => {
+      if (reconnectInterval) clearInterval(reconnectInterval);
+      if (ws) ws.close();
+    };
+  }, []);
+
+  // HTTP Status Check (backup method) - DISABLED FOR DEBUGGING
+  /*
+  useEffect(() => {
+    const checkStatus = async () => {
+      try {
+        const response = await fetch('http://192.168.134.191:5000/device-status'); // Update this IP
+        const data = await response.json();
+        
+        console.log('🌐 HTTP status check:', data);
+        
+        // Only trust HTTP if we haven't had recent WebSocket activity
+        const timeSinceLastWS = Math.min(
+          lastConnectionTime ? Date.now() - lastConnectionTime : Infinity,
+          lastDisconnectionTime ? Date.now() - lastDisconnectionTime : Infinity
+        );
+        
+        if (timeSinceLastWS > 10000) { // No WebSocket activity for 10 seconds
+          if (data.connected) {
+            console.log('🟢 HTTP: Device connected');
+            setCubeConnected(true);
+          } else {
+            console.log('🔴 HTTP: Device disconnected');
+            setCubeConnected(false);
+          }
+        }
+        
+      } catch (error) {
+        console.log('❌ HTTP check failed:', error);
+      }
+    };
+
+    // Check every 15 seconds
+    const interval = setInterval(checkStatus, 15000);
+    checkStatus(); // Initial check
+
+    return () => clearInterval(interval);
+  }, [lastConnectionTime, lastDisconnectionTime]);
+  */
+
+  // Timeout disconnection (if no activity for too long)
+  useEffect(() => {
+    if (!cubeConnected) return;
+
+    const timeout = setTimeout(() => {
+      console.log('⏰ Connection timeout - no activity for 15 seconds');
+      setCubeConnected(false);
+      setLastDisconnectionTime(Date.now());
+    }, 15000); // 15 seconds timeout instead of 45
+
+    return () => clearTimeout(timeout);
+  }, [lastConnectionTime, cubeConnected]);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('🔄 CUBE STATE CHANGED:', cubeConnected ? 'CONNECTED' : 'DISCONNECTED');
+  }, [cubeConnected]);
 
   const handleNavigation = (path) => {
     console.log(`Navigate to: ${path}`);
@@ -77,6 +215,63 @@ function Section1() {
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-shadow: none;
+          }
+
+          /* Status Indicator */
+          .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+          }
+
+          .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+          }
+
+          .status-dot.connected {
+            background: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+          }
+
+          .status-dot.disconnected {
+            background: #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+          }
+
+          .status-text {
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+          }
+
+          @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+          }
+
+          /* Debug Corner */
+          .debug-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: monospace;
+            z-index: 1000;
+            border: 1px solid #333;
           }
 
           /* Navigation */
@@ -208,6 +403,49 @@ function Section1() {
             transform: translateY(-5px) scale(1.02);
           }
 
+          /* Disconnected Message */
+          .disconnected-message {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(239, 68, 68, 0.1);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            border-radius: 24px;
+            max-width: 600px;
+            margin: 0 auto;
+          }
+
+          .disconnected-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            opacity: 0.7;
+          }
+
+          .disconnected-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ef4444;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+          }
+
+          .disconnected-text {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+          }
+
+          .power-instruction {
+            font-size: 1.1rem;
+            color: #fbbf24;
+            font-weight: 600;
+            background: rgba(251, 191, 36, 0.1);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+          }
+
           /* Footer */
           .footer {
             position: relative;
@@ -233,13 +471,8 @@ function Section1() {
             text-align: center;
           }
 
-          .footer-left { 
-            text-align: left; 
-          }
-          
-          .footer-right { 
-            text-align: right; 
-          }
+          .footer-left { text-align: left; }
+          .footer-right { text-align: right; }
 
           .footer-title {
             font-size: 1.8rem;
@@ -358,6 +591,10 @@ function Section1() {
             .social-links {
               gap: 1rem;
             }
+
+            .disconnected-message {
+              margin: 0 1rem;
+            }
           }
 
           @media (max-width: 480px) {
@@ -382,11 +619,24 @@ function Section1() {
             .footer-content {
               padding: 3rem 1rem 2rem;
             }
+
+            .disconnected-title {
+              font-size: 1.5rem;
+            }
+
+            .disconnected-text {
+              font-size: 1rem;
+            }
           }
         `}
       </style>
 
       <div className="app">
+        {/* Debug Info */}
+        <div className="debug-info">
+          STATUS: {cubeConnected ? 'CONNECTED' : 'DISCONNECTED'}
+        </div>
+
         {/* Header */}
         <header className="header">
           <div className="header-content">
@@ -394,6 +644,14 @@ function Section1() {
               <span className="brand-accent">SonicG</span>Low<br/>
               <span className="brand-accent">Cube</span>
             </h1>
+            
+            {/* Status Indicator */}
+            <div className="status-indicator">
+              <div className={`status-dot ${cubeConnected ? 'connected' : 'disconnected'}`}></div>
+              <span className="status-text">
+                {cubeConnected ? 'Cube Connected' : 'Cube Disconnected'}
+              </span>
+            </div>
           </div>
           
           {/* Navigation */}
@@ -422,20 +680,33 @@ function Section1() {
 
         {/* Main Content */}
         <main className="main-content">
-          <div className="button-container">
-            <button 
-              onClick={() => handleNavigation("/Predefined")}
-              className="pattern-button"
-            >
-              Pre Defined<br />Patterns
-            </button>
-            <button 
-              onClick={() => handleNavigation("/Userdefined")}
-              className="pattern-button"
-            >
-              User Defined<br />Patterns
-            </button>
-          </div>
+          {cubeConnected ? (
+            <div className="button-container">
+              <button 
+                onClick={() => handleNavigation("/Predefined")}
+                className="pattern-button"
+              >
+                Pre Defined<br />Patterns
+              </button>
+              <button 
+                onClick={() => handleNavigation("/Userdefined")}
+                className="pattern-button"
+              >
+                User Defined<br />Patterns
+              </button>
+            </div>
+          ) : (
+            <div className="disconnected-message">
+              <div className="disconnected-icon">🔌</div>
+              <h2 className="disconnected-title">Cube is Not Powered On</h2>
+              <p className="disconnected-text">
+                Your SonicGlow Cube is not currently connected to the system.
+              </p>
+              <div className="power-instruction">
+                📋 Press and hold the power switch to turn on the cube
+              </div>
+            </div>
+          )}
         </main>
 
         {/* Footer */}

@@ -34,7 +34,7 @@ const Predefined = () => {
         timestamp: Date.now()
       };
 
-      const result = await fetch("http://localhost:3000/send-pattern", {
+      const result = await fetch("http://192.168.134.191:5000/send-pattern", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

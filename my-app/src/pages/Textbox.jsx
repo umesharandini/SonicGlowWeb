@@ -9,7 +9,7 @@ const Text = () => {
 
     console.log("Submitted text:", upperCaseText);
 
-    const result = await fetch("http://localhost:3000/send-test", {
+    const result = await fetch("http://192.168.134.191:5000/send-test", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

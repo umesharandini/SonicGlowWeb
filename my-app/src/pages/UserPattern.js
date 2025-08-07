@@ -32,7 +32,7 @@ const UserPattern = () => {
       });
     });
     try {
-      await axios.post('http://localhost:8080/set_pattern_custom', { pattern_data: activeCells }); // Changed to 8080
+      await axios.post('http://192.168.134.191:5080/set_pattern_custom', { pattern_data: activeCells }); // Changed to 8080
       console.log('Pattern sent:', activeCells);
     } catch (error) {
       console.error('Error:', error);
