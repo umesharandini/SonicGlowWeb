@@ -5,7 +5,7 @@ const Text = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     setIsLoading(true);
     
     const upperCaseText = inputText.toUpperCase();
@@ -61,7 +61,7 @@ const Text = () => {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(0, 0, 0, 0.1);
+          background: #2d3748;
           backdrop-filter: blur(1px);
         }
 

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './UserPattern.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 

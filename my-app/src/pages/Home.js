@@ -1,325 +1,13 @@
 import React from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
-  const styles = {
-    // Reset and base styles
-    global: {
-      margin: 0,
-      padding: 0,
-      boxSizing: 'border-box',
-      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-      lineHeight: 1.6,
-      color: '#333',
-      backgroundColor: '#f8f9fa'
-    },
+  const navigator = useNavigate();
 
-    // Header Styles
-    mainHeader: {
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      color: 'white',
-      boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)'
-    },
-
-    headerContainer: {
-      position: 'relative',
-      padding: '2rem 0',
-      textAlign: 'center',
-      overflow: 'hidden'
-    },
-
-    headerBg: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-      opacity: 0.3,
-      zIndex: 0
-    },
-
-    brandTitle: {
-      position: 'relative',
-      zIndex: 1
-    },
-
-    brandTitleH1: {
-      fontSize: '3.5rem',
-      fontWeight: 300,
-      letterSpacing: '0.05em',
-      textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
-      marginBottom: 0
-    },
-
-    bold: {
-      fontWeight: 700,
-      color: '#ffd700',
-      textShadow: '2px 2px 8px rgba(255, 215, 0, 0.5)'
-    },
-
-    // Navigation Styles
-    mainNavigation: {
-      background: 'rgba(255, 255, 255, 0.95)',
-      backdropFilter: 'blur(10px)',
-      borderTop: '1px solid rgba(255, 255, 255, 0.2)',
-      padding: 0,
-      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
-    },
-
-    navList: {
-      display: 'flex',
-      justifyContent: 'center',
-      listStyle: 'none',
-      margin: 0,
-      padding: 0
-    },
-
-    navItem: {
-      margin: 0
-    },
-
-    navLink: {
-      display: 'block',
-      padding: '1.2rem 2rem',
-      color: '#333',
-      textDecoration: 'none',
-      fontWeight: 500,
-      fontSize: '1.1rem',
-      transition: 'all 0.3s ease',
-      borderBottom: '3px solid transparent'
-    },
-
-    navLinkHover: {
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      color: 'white',
-      transform: 'translateY(-2px)',
-      borderBottomColor: '#ffd700'
-    },
-
-    navLinkActive: {
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      color: 'white',
-      borderBottomColor: '#ffd700'
-    },
-
-    // Main Content Styles
-    mainContent: {
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gap: '4rem',
-      maxWidth: '1200px',
-      margin: '4rem auto',
-      padding: '0 2rem',
-      alignItems: 'center',
-      minHeight: '60vh'
-    },
-
-    welcomeSection: {
-      padding: '2rem 0'
-    },
-
-    welcomeText: {
-      maxWidth: '600px'
-    },
-
-    sectionTitle: {
-      fontSize: '2.8rem',
-      fontWeight: 700,
-      color: '#2c3e50',
-      marginBottom: '1.5rem',
-      lineHeight: 1.2,
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      backgroundClip: 'text'
-    },
-
-    sectionDescription: {
-      fontSize: '1.2rem',
-      lineHeight: 1.8,
-      color: '#555',
-      marginBottom: '2.5rem',
-      textAlign: 'justify'
-    },
-
-    descriptionStrong: {
-      color: '#667eea',
-      fontWeight: 600
-    },
-
-    getStartedContainer: {
-      marginTop: '2rem'
-    },
-
-    getStartedButton: {
-      display: 'inline-block',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      color: 'white',
-      padding: '1rem 2.5rem',
-      textDecoration: 'none',
-      borderRadius: '50px',
-      fontWeight: 600,
-      fontSize: '1.1rem',
-      transition: 'all 0.3s ease',
-      boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
-      textTransform: 'uppercase',
-      letterSpacing: '0.5px'
-    },
-
-    getStartedButtonHover: {
-      transform: 'translateY(-3px)',
-      boxShadow: '0 8px 25px rgba(102, 126, 234, 0.4)',
-      background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)'
-    },
-
-    // Cube Showcase Styles
-    cubeShowcase: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: '2rem 0'
-    },
-
-    cubeImage: {
-      textAlign: 'center',
-      position: 'relative'
-    },
-
-    cubeImg: {
-      maxWidth: '100%',
-      height: 'auto',
-      borderRadius: '20px',
-      boxShadow: '0 15px 35px rgba(0, 0, 0, 0.1)',
-      transition: 'all 0.3s ease',
-      filter: 'drop-shadow(0 10px 20px rgba(102, 126, 234, 0.2))'
-    },
-
-    cubeImgHover: {
-      transform: 'scale(1.05) rotate(2deg)',
-      boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)'
-    },
-
-    // Footer Styles
-    mainFooter: {
-      background: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)',
-      color: 'white',
-      marginTop: '4rem',
-      padding: '3rem 0 2rem'
-    },
-
-    footerContent: {
-      display: 'grid',
-      gridTemplateColumns: '1fr auto 1fr',
-      gap: '3rem',
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '0 2rem',
-      alignItems: 'center'
-    },
-
-    footerSection: {
-      textAlign: 'center'
-    },
-
-    footerLeft: {
-      textAlign: 'left'
-    },
-
-    footerRight: {
-      textAlign: 'right'
-    },
-
-    footerTitle: {
-      fontSize: '1.8rem',
-      fontWeight: 700,
-      marginBottom: '1rem',
-      color: '#ffd700'
-    },
-
-    footerDescription: {
-      fontSize: '1rem',
-      lineHeight: 1.6,
-      color: '#bdc3c7'
-    },
-
-    socialSection: {
-      display: 'flex',
-      justifyContent: 'center'
-    },
-
-    socialStickers: {
-      display: 'flex',
-      gap: '1.5rem',
-      justifyContent: 'center'
-    },
-
-    socialLink: {
-      display: 'block',
-      padding: '0.8rem',
-      background: 'rgba(255, 255, 255, 0.1)',
-      borderRadius: '50%',
-      transition: 'all 0.3s ease',
-      backdropFilter: 'blur(10px)'
-    },
-
-    socialLinkHover: {
-      background: 'rgba(255, 255, 255, 0.2)',
-      transform: 'translateY(-3px) scale(1.1)',
-      boxShadow: '0 5px 15px rgba(0, 0, 0, 0.2)'
-    },
-
-    socialIcon: {
-      width: '30px',
-      height: '30px',
-      objectFit: 'contain',
-      filter: 'brightness(0) invert(1)'
-    },
-
-    contactInfo: {
-      fontSize: '1rem',
-      marginBottom: '0.5rem',
-      color: '#bdc3c7'
-    },
-
-    contactLink: {
-      color: '#ffd700',
-      textDecoration: 'none',
-      fontWeight: 500,
-      transition: 'all 0.3s ease'
-    },
-
-    contactLinkHover: {
-      color: '#fff',
-      textShadow: '0 0 5px #ffd700'
-    },
-
-    copyright: {
-      fontSize: '0.9rem',
-      color: '#95a5a6',
-      fontWeight: 300
-    }
+  const handleNavigation = (path) => {
+    console.log(`Navigate to: ${path}`);
+    navigator(path);
   };
-
-  // Media queries handled through JavaScript
-  const isMobile = window.innerWidth <= 768;
-  const isTablet = window.innerWidth <= 968 && window.innerWidth > 768;
-
-  // Responsive style adjustments
-  if (isMobile) {
-    styles.mainContent.gridTemplateColumns = '1fr';
-    styles.mainContent.textAlign = 'center';
-    styles.mainContent.gap = '2rem';
-    styles.footerContent.gridTemplateColumns = '1fr';
-    styles.footerContent.gap = '2rem';
-    styles.footerContent.textAlign = 'center';
-    styles.footerLeft.textAlign = 'center';
-    styles.footerRight.textAlign = 'center';
-    styles.brandTitleH1.fontSize = '2.5rem';
-    styles.sectionTitle.fontSize = '2.2rem';
-    styles.navList.flexDirection = 'column';
-  }
 
   return (
     <>
@@ -330,214 +18,564 @@ function Home() {
             padding: 0;
             box-sizing: border-box;
           }
+
           body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
+            color: #2d3748;
+            background: #ffffff;
           }
-          .nav-link:hover {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-            color: white !important;
-            transform: translateY(-2px) !important;
-            border-bottom-color: #ffd700 !important;
+
+          .app {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 100%);
+            position: relative;
           }
-          .get-started-button:hover {
-            transform: translateY(-3px) !important;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
+
+          .app::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+              radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(147, 197, 253, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
           }
-          .cube-img:hover {
-            transform: scale(1.05) rotate(2deg) !important;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+
+          /* Header */
+          .header {
+            position: relative;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           }
+
+          .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+          }
+
+          .brand-title {
+            font-size: 4rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+          }
+
+          .brand-accent {
+            background: linear-gradient(45deg, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+          }
+
+          /* Navigation */
+          .nav {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+          }
+
+          .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+          }
+
+          .nav-list {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 0;
+          }
+
+          .nav-button {
+            padding: 1.5rem 2.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+          }
+
+          .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+            transition: left 0.5s;
+          }
+
+          .nav-button:hover::before {
+            left: 100%;
+          }
+
+          .nav-button:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+          }
+
+          .nav-button.active {
+            background: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+          }
+
+          /* Main Content */
+          .main-content {
+            position: relative;
+            z-index: 5;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+            min-height: 70vh;
+          }
+
+          .welcome-section {
+            color: white;
+          }
+
+          .section-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            text-align: left;
+          }
+
+          .title-highlight {
+            background: linear-gradient(to bottom, #1b1430, #4d4364);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: #0f43d4;
+            background-clip: text;
+          }
+
+          .section-description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 3rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+          }
+
+          .description-strong {
+            color: #60a5fa;
+            font-weight: 700;
+          }
+
+          .cta-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+          }
+
+          .get-started-btn {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+          }
+
+          .get-started-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #1d4ed8, #3b82f6);
+            transition: left 0.3s;
+          }
+
+          .get-started-btn:hover::before {
+            left: 0;
+          }
+
+          .get-started-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.5);
+          }
+
+          .get-started-btn span {
+            position: relative;
+            z-index: 1;
+          }
+
+          /* Cube Showcase */
+          .cube-showcase {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .cube-container {
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+          }
+
+          .cube-bg {
+            position: absolute;
+            top: -2rem;
+            left: -2rem;
+            right: -2rem;
+            bottom: -2rem;
+            background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.05));
+            border-radius: 2rem;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+
+          .cube-container:hover .cube-bg {
+            transform: rotate(-2deg) scale(1.02);
+            background: linear-gradient(45deg, rgba(59, 130, 246, 0.15), rgba(147, 197, 253, 0.08));
+          }
+
+          .cube-img {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: auto;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+
+          .cube-container:hover .cube-img {
+            transform: scale(1.05) rotate(1deg);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.4);
+          }
+
+          /* Footer */
+          .footer {
+            position: relative;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            color: white;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+          }
+
+          .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 4rem;
+            align-items: center;
+          }
+
+          .footer-section {
+            text-align: center;
+          }
+
+          .footer-left { text-align: left; }
+          .footer-right { text-align: right; }
+
+          .footer-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
+
+          .footer-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+          }
+
+          .social-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+          }
+
+          .social-link {
+            width: 3.5rem;
+            height: 3.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+          }
+
           .social-link:hover {
-            background: rgba(255, 255, 255, 0.2) !important;
-            transform: translateY(-3px) scale(1.1) !important;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
           }
+
+          .social-icon {
+            width: 1.8rem;
+            height: 1.8rem;
+            filter: brightness(0) invert(1);
+            transition: all 0.3s ease;
+          }
+
+          .contact-info {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+          }
+
+          .contact-link {
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+          }
+
           .contact-link:hover {
-            color: #fff !important;
-            text-shadow: 0 0 5px #ffd700 !important;
+            color: #3b82f6;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
           }
+
+          .copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+          }
+
+          /* Responsive Design */
           @media (max-width: 968px) {
             .main-content {
-              grid-template-columns: 1fr !important;
-              text-align: center !important;
-              gap: 2rem !important;
+              grid-template-columns: 1fr;
+              gap: 4rem;
+              text-align: center;
+              padding: 4rem 2rem;
             }
+
             .footer-content {
-              grid-template-columns: 1fr !important;
-              gap: 2rem !important;
-              text-align: center !important;
+              grid-template-columns: 1fr;
+              gap: 3rem;
+              text-align: center;
             }
+
             .footer-left, .footer-right {
-              text-align: center !important;
+              text-align: center;
             }
           }
+
           @media (max-width: 768px) {
-            .brand-title h1 {
-              font-size: 2.5rem !important;
+            .brand-title {
+              font-size: 3rem;
             }
+
             .nav-list {
-              flex-direction: column !important;
+              flex-wrap: wrap;
+              justify-content: center;
             }
+
+            .nav-button {
+              padding: 1rem 1.5rem;
+              font-size: 0.9rem;
+            }
+
             .section-title {
-              font-size: 2.2rem !important;
+              font-size: 2.5rem;
             }
+
             .main-content {
-              padding: 0 1rem !important;
-              margin: 2rem auto !important;
+              padding: 3rem 1rem;
             }
-            .social-stickers {
-              gap: 1rem !important;
+
+            .social-links {
+              gap: 1rem;
             }
           }
+
           @media (max-width: 480px) {
-            .brand-title h1 {
-              font-size: 2rem !important;
+            .brand-title {
+              font-size: 2.2rem;
             }
+
             .section-title {
-              font-size: 1.8rem !important;
+              font-size: 2rem;
             }
+
             .section-description {
-              font-size: 1rem !important;
+              font-size: 1rem;
             }
-            .get-started-button {
-              padding: 0.8rem 2rem !important;
-              font-size: 1rem !important;
+
+            .get-started-btn {
+              padding: 1rem 2rem;
+              font-size: 1rem;
+            }
+
+            .nav-list {
+              flex-direction: column;
+            }
+
+            .nav-button {
+              padding: 1rem;
             }
           }
         `}
       </style>
 
-      <header style={styles.mainHeader} className="main-header">
-        <div style={styles.headerContainer} className="header-container">
-          
-          <div style={styles.brandTitle} className="brand-title">
-            <h1 style={styles.brandTitleH1}>
-              <span style={styles.bold} className="bold">SonicG</span>Low<br />
-              <span style={styles.bold} className="bold">Cube</span>
+      <div className="app">
+        {/* Header */}
+        <header className="header">
+          <div className="header-content">
+            <h1 className="brand-title">
+              <span className="brand-accent">SonicG</span>Low<br/>
+              <span className="brand-accent">Cube</span>
             </h1>
           </div>
-        </div>
-        
-        <nav style={styles.mainNavigation} className="main-navigation">
-          <ul style={styles.navList} className="nav-list">
-            <li style={styles.navItem} className="nav-item">
-              <Link to="/" style={styles.navLink} className="nav-link">Home</Link>
-            </li>
-            <li style={styles.navItem} className="nav-item">
-              <Link to="/resources" style={styles.navLink} className="nav-link">Resources</Link>
-            </li>
-            <li style={styles.navItem} className="nav-item">
-              <Link to="/cube" style={styles.navLink} className="nav-link">SonicGlow Cube</Link>
-            </li>
-            <li style={styles.navItem} className="nav-item">
-              <Link to="/about" style={{...styles.navLink, ...styles.navLinkActive}} className="nav-link active">About Us</Link>
-            </li>
-          </ul>
-        </nav>
-      </header>
+          
+          {/* Navigation */}
+          <nav className="nav">
+            <div className="nav-container">
+              <ul className="nav-list">
+                {[
+                  { path: "/", label: "Home", active: true },
+                  { path: "/resources", label: "Resources" },
+                  { path: "/cube", label: "SonicGlow Cube" },
+                  { path: "/about", label: "About Us" }
+                ].map((item, idx) => (
+                  <li key={idx}>
+                    <button 
+                      onClick={() => handleNavigation(item.path)}
+                      className={`nav-button ${item.active ? 'active' : ''}`}
+                    >
+                      {item.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </nav>
+        </header>
 
-      <main style={styles.mainContent} className="main-content">
-        <section style={styles.welcomeSection} className="welcome-section">
-          <div style={styles.welcomeText} className="welcome-text">
-            <h2 style={styles.sectionTitle} className="section-title">Welcome to SonicGlow Cube</h2>
-            <p style={styles.sectionDescription} className="section-description">
-              <strong style={styles.descriptionStrong}>SonicGlow Cube</strong> is an innovative 3D LED display system 
+        {/* Main Content */}
+        <main className="main-content">
+          {/* Welcome Section */}
+          <section className="welcome-section">
+            <h2 className="section-title">
+              Welcome to <span className="title-highlight">SonicGlow Cube</span>
+            </h2>
+            <p className="section-description">
+              <strong className="description-strong">SonicGlow Cube</strong> is an innovative 3D LED display system 
               designed to light up your world with dynamic patterns, animations, and custom text.
-              <br /><br />
+              <br/><br/>
               Explore pre-designed effects or create your own using our web interface!
             </p>
-            <div style={styles.getStartedContainer} className="get-started-container">
-              <Link to="/Section1" style={styles.getStartedButton} className="get-started-button">
-                Get Started
-              </Link>
+            <div className="cta-container">
+              <button 
+                onClick={() => navigator("/Section1")}
+                className="get-started-btn"
+              >
+                <span>Get Started</span>
+              </button>
+            </div>
+          </section>
+
+          {/* Cube Showcase */}
+          <section className="cube-showcase">
+            <div className="cube-container">
+              <div className="cube-bg"></div>
+              <img 
+                src="/images/soniccube1.png" 
+                alt="SonicGlow LED Cube"
+                className="cube-img"
+              />
+            </div>
+          </section>
+        </main>
+
+        {/* Footer */}
+        <footer className="footer">
+          <div className="footer-content">
+            {/* Brand Info */}
+            <div className="footer-section footer-left">
+              <h3 className="footer-title">SonicGlow Cube</h3>
+              <p className="footer-description">
+                Created by Hardware Hackers<br/>
+                University of Moratuwa – First-Year Hardware Project
+              </p>
+            </div>
+
+            {/* Social Links */}
+            <div className="footer-section">
+              <div className="social-links">
+                {[
+                  { href: "https://www.facebook.com/", src: "/images/fb.png", alt: "Facebook" },
+                  { href: "https://www.youtube.com/", src: "/images/youtube.png", alt: "YouTube" },
+                  { href: "https://www.linkedin.com/", src: "/images/linkedin.png", alt: "LinkedIn" },
+                  { href: "https://www.instagram.com/", src: "/images/inst.png", alt: "Instagram" }
+                ].map((social, idx) => (
+                  <a 
+                    key={idx}
+                    href={social.href} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="social-link"
+                  >
+                    <img src={social.src} alt={social.alt} className="social-icon" />
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Contact Info */}
+            <div className="footer-section footer-right">
+              <p className="contact-info">
+                Contact us: 
+                <a 
+                  href="mailto:hardwarehackers@uom.lk" 
+                  className="contact-link"
+                >
+                  hardwarehackers@uom.lk
+                </a>
+              </p>
+              <p className="copyright">
+                © 2025 SonicGlow Cube | All rights reserved
+              </p>
             </div>
           </div>
-        </section>
-
-        <section style={styles.cubeShowcase} className="cube-showcase">
-          <div style={styles.cubeImage} className="cube-image">
-            <img 
-              src="/images/soniccube1.png" 
-              alt="SonicGlow LED Cube" 
-              style={styles.cubeImg}
-              className="cube-img"
-            />
-          </div>
-        </section>
-      </main>
-
-      <footer style={styles.mainFooter} className="main-footer">
-        <div style={styles.footerContent} className="footer-content">
-          <div style={{...styles.footerSection, ...styles.footerLeft}} className="footer-section footer-left">
-            <h3 style={styles.footerTitle} className="footer-title">SonicGlow Cube</h3>
-            <p style={styles.footerDescription} className="footer-description">
-              Created by Hardware Hackers<br />
-              University of Moratuwa – First-Year Hardware Project
-            </p>
-          </div>
-
-          <div style={{...styles.footerSection, ...styles.socialSection}} className="footer-section social-section">
-            <div style={styles.socialStickers} className="social-stickers">
-              <a 
-                href="https://www.facebook.com/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={styles.socialLink}
-                className="social-link"
-              >
-                <img src="/images/fb.png" alt="Facebook" style={styles.socialIcon} className="social-icon" />
-              </a>
-              <a 
-                href="https://www.youtube.com/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={styles.socialLink}
-                className="social-link"
-              >
-                <img src="/images/youtube.png" alt="YouTube" style={styles.socialIcon} className="social-icon" />
-              </a>
-              <a 
-                href="https://www.linkedin.com/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={styles.socialLink}
-                className="social-link"
-              >
-                <img src="/images/linkedin.png" alt="LinkedIn" style={styles.socialIcon} className="social-icon" />
-              </a>
-              <a 
-                href="https://www.instagram.com/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={styles.socialLink}
-                className="social-link"
-              >
-                <img src="/images/inst.png" alt="Instagram" style={styles.socialIcon} className="social-icon" />
-              </a>
-            </div>
-          </div>
-
-          <div style={{...styles.footerSection, ...styles.footerRight}} className="footer-section footer-right">
-            <p style={styles.contactInfo} className="contact-info">
-              Contact us: 
-              <a 
-                href="mailto:hardwarehackers@uom.lk" 
-                style={styles.contactLink}
-                className="contact-link"
-              >
-                hardwarehackers@uom.lk
-              </a>
-            </p>
-            <p style={styles.copyright} className="copyright">
-              © 2025 SonicGlow Cube | All rights reserved
-            </p>
-          </div>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </>
   );
 }

@@ -77,7 +77,7 @@ const Predefined = () => {
         }
 
         .predefined-container {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(to bottom, #1b1430, #0b172cff);
           min-height: 100vh;
           padding: 20px;
           position: relative;
@@ -90,7 +90,7 @@ const Predefined = () => {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(0, 0, 0, 0.1);
+          background: #2d3748;
           backdrop-filter: blur(1px);
         }
 
