@@ -9,6 +9,10 @@ import Userdefined from './pages/Userdefined';
 import UserText from './pages/UserText';
 import UserPattern from './pages/UserPattern';
 import Text from "./pages/Textbox";
+import Resources from './pages/Resources';
+import SonicGlow from './pages/SonicGlow';
+import About from './pages/About';
+
 
 function App() {
   return (
@@ -21,6 +25,10 @@ function App() {
         <Route path="/userText" element={<UserText />} />
         <Route path="/userPattern" element={<UserPattern />} />
         <Route path="/text" element={<Text/>}/>
+         <Route path="/resources" element={<Resources />} />
+         <Route path="/cube" element={<SonicGlow />} />
+         <Route path="/about" element={<About />} />
+
       </Routes>
     </Router>
   );
