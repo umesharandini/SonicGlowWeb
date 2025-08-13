@@ -23,7 +23,6 @@ function About() {
  const teamMembers = [
     {
       name: "Manusha",
-      role: "Power Systems & 3D Design Specialist",
       image: "/images/manusha.jpg",
       description: "Specializes in power supply assembly and LED layer connectivity. Responsible for 3D modeling and user input pattern recognition systems.",
       skills: ["Power Supply Assembly", "LED Layer Connection", "3D Modeling", "Pattern Recognition"],
@@ -31,7 +30,6 @@ function About() {
     },
     {
       name: "Vishmi",
-      role: "PCB Designer & Control Systems Engineer",
       image: "/images/vishmi.jpg",
       description: "Focuses on PCB design and assembly, control switch implementation, and user input pattern recognition for seamless cube operation.",
       skills: ["PCB Design", "Circuit Assembly", "Switch Control", "Pattern Recognition"],
@@ -39,7 +37,6 @@ function About() {
     },
     {
       name: "Umesha",
-      role: "NodeMCU Developer & Web Interface Designer",
       image: "/images/umesha.jpg",
       description: "Handles NodeMCU configuration and programming, LED cube construction, and web interface development for remote control.",
       skills: ["NodeMCU Programming", "LED Cube Construction", "Web Development", "Interface Design"],
@@ -47,7 +44,6 @@ function About() {
     },
     {
       name: "Sailendra",
-      role: "Arduino Specialist & Pattern Creator",
       image: "/images/saile.jpg",
       description: "Manages Arduino board configuration, remote controller setup, pattern creation, and web interface implementation.",
       skills: ["Arduino Programming", "Remote Control", "Pattern Creation", "Web Interface"],
@@ -96,19 +92,19 @@ function About() {
       href: "https://www.youtube.com/", 
       text: "YT", 
       alt: "YouTube",
-      icon: "/images/youtube-icon.svg"
+      icon: "/images/youtube.png"
     },
     { 
       href: "https://www.linkedin.com/", 
       text: "LI", 
       alt: "LinkedIn",
-      icon: "/images/linkedin-icon.svg"
+      icon: "/images/linkedin.png"
     },
     { 
       href: "https://www.instagram.com/", 
       text: "IG", 
       alt: "Instagram",
-      icon: "/images/instagram-icon.svg"
+      icon: "/images/inst.png"
     }
   ];
 

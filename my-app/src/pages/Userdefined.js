@@ -475,9 +475,7 @@ function Userdefined() {
             <button onClick={() => handleNavigation("/UserText")} className="main-button">
               Text And<br />Numbers
             </button>
-            <button onClick={() => handleNavigation("/UserPattern")} className="main-button">
-              User Defined<br />Pattern
-            </button>
+           
           </div>
         </main>
 

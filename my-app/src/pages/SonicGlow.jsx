@@ -4,10 +4,15 @@ import { useNavigate } from 'react-router-dom';
 function SonicGlow() {
   const navigator = useNavigate();
   const [activeFeature, setActiveFeature] = useState(0);
+  const [socialIconErrors, setSocialIconErrors] = useState({});
 
   const handleNavigation = (path) => {
     console.log(`Navigate to: ${path}`);
     navigator(path);
+  };
+
+  const handleSocialIconError = (iconIndex) => {
+    setSocialIconErrors(prev => ({ ...prev, [iconIndex]: true }));
   };
 
   const features = [
@@ -42,6 +47,66 @@ function SonicGlow() {
     { label: "Applications", value: "Home, Hotel, Events" },
     { label: "Design", value: "Portable & Compact" },
     { label: "Features", value: "Text Display & Patterns" }
+  ];
+
+  const galleryImages = [
+    {
+      src: "/images/cube1.jpg",
+      alt: "SonicGlow Cube Front View",
+      caption: "Front View Display"
+    },
+    {
+      src: "/images/cube2.jpg", 
+      alt: "SonicGlow Cube Side View",
+      caption: "Side View Angle"
+    },
+    {
+      src: "/images/cube3.jpg",
+      alt: "SonicGlow Cube LED Pattern",
+      caption: "LED Pattern Display"
+    },
+    {
+      src: "/images/cube4.jpg",
+      alt: "SonicGlow Cube Remote Control",
+      caption: "Remote Control Interface"
+    },
+    {
+      src: "/images/cube5.jpg",
+      alt: "SonicGlow Cube Web Interface",
+      caption: "Web Control Panel"
+    },
+    {
+      src: "/images/cube6.jpg",
+      alt: "SonicGlow Cube in Environment",
+      caption: "Perfect for Any Space"
+    }
+  ];
+
+  const socialLinks = [
+    { 
+      href: "https://www.facebook.com/", 
+      text: "FB", 
+      alt: "Facebook",
+      icon: "/images/fb.png"
+    },
+    { 
+      href: "https://www.youtube.com/", 
+      text: "YT", 
+      alt: "YouTube",
+      icon: "/images/youtube.png"
+    },
+    { 
+      href: "https://www.linkedin.com/", 
+      text: "LI", 
+      alt: "LinkedIn",
+      icon: "/images/linkedin.png"
+    },
+    { 
+      href: "https://www.instagram.com/", 
+      text: "IG", 
+      alt: "Instagram",
+      icon: "/images/inst.png"
+    }
   ];
 
   return (
@@ -248,74 +313,6 @@ function SonicGlow() {
             letter-spacing: 1px;
           }
 
-          .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-          }
-
-          .primary-btn {
-            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
-            color: white;
-            padding: 1.2rem 3rem;
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
-          }
-
-          .primary-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #1d4ed8, #3b82f6);
-            transition: left 0.3s;
-          }
-
-          .primary-btn:hover::before {
-            left: 0;
-          }
-
-          .primary-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.5);
-          }
-
-          .primary-btn span {
-            position: relative;
-            z-index: 1;
-          }
-
-          .secondary-btn {
-            background: transparent;
-            color: white;
-            padding: 1.2rem 3rem;
-            border: 2px solid rgba(59, 130, 246, 0.5);
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-          }
-
-          .secondary-btn:hover {
-            background: rgba(59, 130, 246, 0.2);
-            border-color: rgba(59, 130, 246, 0.8);
-            transform: translateY(-2px);
-          }
-
           /* Product Showcase */
           .product-showcase {
             display: flex;
@@ -503,7 +500,7 @@ function SonicGlow() {
 
           .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
             margin-top: 3rem;
           }
@@ -521,9 +518,15 @@ function SonicGlow() {
             box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
           }
 
+          .gallery-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+          }
+
           .gallery-placeholder {
             width: 100%;
-            height: 200px;
+            height: 250px;
             background: linear-gradient(45deg, rgba(59, 130, 246, 0.2), rgba(147, 197, 253, 0.1));
             display: flex;
             align-items: center;
@@ -600,6 +603,9 @@ function SonicGlow() {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(59, 130, 246, 0.2);
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
           }
 
           .social-link:hover {
@@ -611,8 +617,13 @@ function SonicGlow() {
           .social-icon {
             width: 1.8rem;
             height: 1.8rem;
-            filter: brightness(0) invert(1);
             transition: all 0.3s ease;
+          }
+
+          .social-text {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
           }
 
           .contact-info {
@@ -652,6 +663,10 @@ function SonicGlow() {
             }
 
             .specs-grid {
+              grid-template-columns: 1fr;
+            }
+
+            .gallery-grid {
               grid-template-columns: 1fr;
             }
 
@@ -698,12 +713,12 @@ function SonicGlow() {
               gap: 1rem;
             }
 
-            .cta-buttons {
-              justify-content: center;
-            }
-
             .social-links {
               gap: 1rem;
+            }
+
+            .gallery-grid {
+              grid-template-columns: 1fr;
             }
           }
 
@@ -730,11 +745,6 @@ function SonicGlow() {
 
             .feature-card, .specs-section {
               padding: 2rem;
-            }
-
-            .primary-btn, .secondary-btn {
-              padding: 1rem 2rem;
-              font-size: 1rem;
             }
           }
         `}
@@ -806,21 +816,6 @@ function SonicGlow() {
                   <div className="stat-label">Custom Text</div>
                 </div>
               </div>
-
-              <div className="cta-buttons">
-                <button 
-                  onClick={() => handleNavigation("/order")}
-                  className="primary-btn"
-                >
-                  <span>Order Now</span>
-                </button>
-                <button 
-                  onClick={() => handleNavigation("/demo")}
-                  className="secondary-btn"
-                >
-                  Watch Demo
-                </button>
-              </div>
             </div>
 
             {/* Product Showcase */}
@@ -869,32 +864,25 @@ function SonicGlow() {
 
           {/* Gallery Section */}
           <section className="gallery-section">
-            <h3 className="section-title">See It In Action</h3>
+            <h3 className="section-title">Product Gallery</h3>
             <div className="gallery-grid">
-              <div className="gallery-item">
-                <div className="gallery-placeholder">🌈</div>
-                <div className="gallery-caption">Dynamic Pattern Display</div>
-              </div>
-              <div className="gallery-item">
-                <div className="gallery-placeholder">📝</div>
-                <div className="gallery-caption">Custom Text Messages</div>
-              </div>
-              <div className="gallery-item">
-                <div className="gallery-placeholder">✨</div>
-                <div className="gallery-caption">Animated Effects</div>
-              </div>
-              <div className="gallery-item">
-                <div className="gallery-placeholder">🎛️</div>
-                <div className="gallery-caption">Remote Control</div>
-              </div>
-              <div className="gallery-item">
-                <div className="gallery-placeholder">🌐</div>
-                <div className="gallery-caption">Web Interface</div>
-              </div>
-              <div className="gallery-item">
-                <div className="gallery-placeholder">🏠</div>
-                <div className="gallery-caption">Perfect for Any Space</div>
-              </div>
+              {galleryImages.map((image, idx) => (
+                <div key={idx} className="gallery-item">
+                  <img 
+                    src={image.src} 
+                    alt={image.alt}
+                    className="gallery-img"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="gallery-placeholder" style={{display: 'none'}}>
+                    📷
+                  </div>
+                  <div className="gallery-caption">{image.caption}</div>
+                </div>
+              ))}
             </div>
           </section>
         </main>
@@ -914,20 +902,25 @@ function SonicGlow() {
             {/* Social Links */}
             <div className="footer-section">
               <div className="social-links">
-                {[
-                  { href: "https://www.facebook.com/", src: "/images/fb.png", alt: "Facebook" },
-                  { href: "https://www.youtube.com/", src: "/images/youtube.png", alt: "YouTube" },
-                  { href: "https://www.linkedin.com/", src: "/images/linkedin.png", alt: "LinkedIn" },
-                  { href: "https://www.instagram.com/", src: "/images/inst.png", alt: "Instagram" }
-                ].map((social, idx) => (
+                {socialLinks.map((social, idx) => (
                   <a 
                     key={idx}
                     href={social.href} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="social-link"
+                    title={social.alt}
                   >
-                    <img src={social.src} alt={social.alt} className="social-icon" />
+                    {!socialIconErrors[idx] ? (
+                      <img 
+                        src={social.icon} 
+                        alt={social.alt}
+                        className="social-icon"
+                        onError={() => handleSocialIconError(idx)}
+                      />
+                    ) : (
+                      <span className="social-text">{social.text}</span>
+                    )}
                   </a>
                 ))}
               </div>

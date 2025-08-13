@@ -483,8 +483,8 @@ function Home() {
                     </button>
                   </li>
                 ))}
-              </ul>
-            </div>
+                </ul>
+              </div>
           </nav>
         </header>
 

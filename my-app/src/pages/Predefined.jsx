@@ -6,16 +6,16 @@ const Predefined = () => {
 
   // Define available patterns
   const patterns = [
-    { id: 1, name: "Rain Effect", description: "Falling droplets animation" },
-    { id: 2, name: "Spiral", description: "Rotating spiral pattern" },
-    { id: 3, name: "Wave", description: "Sine wave animation" },
-    { id: 4, name: "Explosion", description: "Center outward burst" },
-    { id: 5, name: "Snake", description: "Moving snake pattern" },
-    { id: 6, name: "Fireworks", description: "Random bursts of light" },
-    { id: 7, name: "Breathing", description: "Fade in/out effect" },
-    { id: 8, name: "Matrix Rain", description: "Digital rain effect" },
-    { id: 9, name: "Cube Rotate", description: "Rotating cube outline" },
-    { id: 10, name: "Random Sparkle", description: "Random LED twinkle" }
+   { id: 0, name: "Rain Effect", description: "Falling droplets animation" },
+{ id: 1, name: "Snake", description: "Moving snake pattern" },
+{ id: 2, name: "Pingpong", description: "Bouncing back and forth pattern" },
+{ id: 3, name: "Fireworks", description: "Random bursts of light" },
+{ id: 4, name: "Breathing", description: "Fade in/out effect" },
+{ id: 5, name: "Countdown", description: "Countdown timer display" },
+{ id: 6, name: "Random Sparkle", description: "Random LED twinkle" },
+{ id: 7, name: "Spiral", description: "Rotating spiral pattern" },
+{ id: 8, name: "Wave", description: "Sine wave animation" },
+{ id: 9, name: "Cube Rotate", description: "Rotating cube outline" }
   ];
 
   const handleSubmit = async () => {
